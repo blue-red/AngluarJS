@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+	<title></title>
+</head>
+<body ng-app="app" ng-controller="myapp">
+	<button type="" ng-click="rank()">排序</button>
+	<button type="" ng-click="ok()">完成</button>
+	<div>
+		<input type="text" name="" ng-model="info.name">
+		<span ng-click="add()"> 添加</span>
+	</div>
+	<ul>
+		<li ng-repeat="(i, opt) in option">
+			<span>{{opt.order}}:{{opt.name}}</span>
+			<span ng-show="visible">
+				<span ng-show="i!=0 " ng-click="up(i,opt.order,id,'ADD')">上移</span>
+				<span ng-show="i!=(option.length+optionPro.length-1) " ng-click="down(i,opt.order,id,'ADD')">下移</span>
+			</span>
+		</li>
+
+		<li ng-repeat="(i, opt) in optionPro">
+			<span>{{option.length+i+1}}:{{opt.name}}</span>
+			<span ng-show="visible">
+				<span ng-show="(option.length+i)!=0 " ng-click="up(i,opt.order,id,'NOADD')">上移</span>
+				<span ng-show="i!=optionPro.length-1 " ng-click="down(i,opt.order,id,'NOADD')">下移</span>
+			</span>
+		</li>
+	</ul>
+
+
+
+
+</body>
+<script type="text/javascript">
+	var app = angular.module('app', []);
+	app.controller('myapp', ['$scope', function($scope){
+		$scope.option = [{name:'选项一',order:1,id:3100}
+					,{name:'选项二',order:2,id:3100}
+					,{name:'选项三',order:3,id:3100}
+					,{name:'选项四',order:4,id:3100}
+					,{name:'选项五',order:5,id:3100}
+					,{name:'选项六',order:6,id:3100}
+					,{name:'选项七',order:7,id:3100}];
+		$scope.optionPro = [];
+
+		$scope.info = {
+			name:'',
+			order:'',
+			id:''
+		}
+		$scope.add = function (){
+			$scope.info.order = $scope.option.length+$scope.optionPro.length+1;
+			$scope.optionPro.push($scope.info);
+			$scope.info = {
+			name:'',
+			order:'',
+			id:''
+			}
+		}
+		$scope.up = function (i,order,id,type){
+			var temp = {};
+			var orderTemp = 0;
+			switch(type){
+				case 'ADD' :
+					orderTemp = $scope.option[i].order;
+					$scope.option[i].order = $scope.option[i-1].order;
+					$scope.option[i-1].order = orderTemp;
+
+					temp = $scope.option[i];
+					$scope.option[i] = $scope.option[i-1];
+					$scope.option[i-1] = temp;
+					break;
+				case  'NOADD' :
+					if (i == 0){
+						orderTemp = $scope.option[$scope.option.length-1].order;
+						$scope.option[$scope.option.length-1].order = $scope.optionPro[0].order;
+						$scope.optionPro[0].order = orderTemp;
+
+						temp = $scope.option[$scope.option.length-1];
+						$scope.option[$scope.option.length-1] = $scope.optionPro[0];
+						$scope.optionPro[0] = temp;
+					}else{
+						orderTemp = $scope.optionPro[i].order;
+						$scope.optionPro[i].order = $scope.optionPro[i-1].order;
+						$scope.optionPro[i-1].order = orderTemp;
+
+						temp = $scope.optionPro[i];
+						$scope.optionPro[i] = $scope.optionPro[i-1];
+						$scope.optionPro[i-1] = temp;
+					}
+					break;
+			}
+
+		}
+
+		$scope.down = function (i,order,id,type){
+			var temp = {};
+			var orderTemp = 0;
+			switch(type){
+				case  'ADD' :
+					if (i == $scope.option.length-1) {
+						orderTemp = $scope.option[$scope.option.length-1].order;
+						$scope.option[$scope.option.length-1] = $scope.optionPro[0].order;
+						$scope.optionPro[0].order = orderTemp;
+
+						temp = $scope.option[$scope.option.length-1];
+						$scope.option[$scope.option.length-1] = $scope.optionPro[0];
+						$scope.optionPro[0] = temp;
+					}else{
+						orderTemp = $scope.option[i].order;
+						$scope.option[i].order = $scope.option[i+1].order;
+						$scope.option[i+1].order = orderTemp;
+
+						temp = $scope.option[i];
+						$scope.option[i] = $scope.option[i+1];
+						$scope.option[i+1] = temp;
+					}
+					break;
+				case 'NOADD' :
+						orderTemp = $scope.optionPro[i].order;
+						$scope.optionPro[i].order = $scope.optionPro[i+1].order;
+						$scope.optionPro[i+1].order = orderTemp;
+
+						temp = $scope.optionPro[i];
+						$scope.optionPro[i] = $scope.optionPro[i+1];
+						$scope.optionPro[i+1] = temp;
+					break;
+			}
+
+		}
+		$scope.visible = false;
+		$scope.rank = function (){
+			if($scope.visible){
+				$scope.visible = false;
+			}else{
+				$scope.visible = true;
+			}
+		
+		}
+		$scope.ok = function (){
+			console.log($scope.option);
+			console.log($scope.optionPro);
+		}
+	}])
+
+
+</script>
+
+
+</html>
