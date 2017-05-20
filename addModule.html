@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+	<title></title>
+</head>
+<body>
+	<div ng-app="app" ng-controller="myapp">
+		<ul>												
+			<li ng-repeat="(i,opt) in option" id="{{i}}" ng-show="opt.visible">
+				<span>{{opt.name}}：</span>
+				<input id="option{{i}}" type="text" name="" placeholder="{{opt.tip}}" ng-model="info.option[$index]">
+				<input id="score{{i}}" type="text" name="" placeholder="0" ng-model="info.score[$index]">
+				<button type="" ng-click="delModule(i)">删除{{i+1}}</button>
+			</li>
+		</ul>
+		<button type="" ng-click="addModule()" ng-disabled="visable">添加</button>
+		<button type="" ng-click="finish()">保存</button>
+	</div>
+</body>
+	<script type="text/javascript">
+		var app = angular.module("app",[]);
+		app.controller('myapp', function($scope,$rootScope){
+			$scope.info = {};
+			var i = 0;
+			var j = 1;
+			$scope.optionVisable = true;
+			$scope.option = [{name:'选项一',tip:'请输入选项一',visible:true},
+					    {name:'选项二',tip:'请输入选项二',visible:true},
+					    {name:'选项三',tip:'请输入选项三',visible:true}];
+
+			$scope.list = [{name:'选项四',tip:'请输入选项四',visible:true},
+					{name:'选项五',tip:'请输入选项五',visible:true},
+					{name:'选项六',tip:'请输入选项六',visible:true},
+					{name:'选项七',tip:'请输入选项七',visible:true},
+					{name:'选项八',tip:'请输入选项八',visible:true},
+					{name:'选项九',tip:'请输入选项九',visible:true},
+					{name:'选项十',tip:'请输入选项十',visible:true}];
+			$scope.addModule = function(){
+				if (i >= 6) {
+					$scope.visable = true;
+				}
+				$scope.option.push($scope.list[i]);
+				i++;
+			};
+			$scope.delModule = function(i){
+				console.log($scope.option.length);
+				if ($scope.option.length <= 3) {
+					$scope.info.option[i] = '';
+					$scope.info.score[i] = 0;
+					$scope.option[i].visible = true;
+				}else{
+					console.log($scope.option[i].visible,$scope.option.length);
+					var length = $scope.option.length;
+					$scope.option[length-j].visible = false;
+					i--;
+					j++;
+					$scope.visable = false;
+				}
+				
+			};
+
+			$scope.finish = function () {
+				console.log($scope.option);
+
+			}
+
+		});
+	</script>
+</html>
